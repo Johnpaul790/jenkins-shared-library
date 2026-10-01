@@ -1,90 +1,92 @@
-# Jenkins Shared Library for Maven and Docker
+# Jenkins Shared Library — Maven and Docker
 
-Personal Jenkins CI/CD project implementing reusable Groovy pipeline components for Maven packaging and Docker image workflows.
+## Overview
 
-The library is used by the related [Java Maven CI/CD project](https://github.com/Johnpaul790/jenkins-java-maven-cicd).
+A reusable [Jenkins Shared Library](https://github.com/Johnpaul790/jenkins-shared-library) for Maven builds and Docker image workflows. It has been successfully loaded and executed by Jenkins from the separate [Java Maven CI/CD application repository](https://github.com/Johnpaul790/jenkins-java-maven-cicd).
 
 ## Purpose
 
-This project demonstrates how common Jenkins pipeline logic can be extracted into a Shared Library instead of repeating shell commands across Jenkins pipelines.
-
-The library provides reusable functions for:
-
-- Maven packaging
-- Docker image builds
-- Docker Hub authentication
-- Docker image publishing
-
-The application pipeline and deployment logic are maintained in the separate application repository.
-
+Centralize reusable CI/CD logic instead of duplicating it across application Jenkinsfiles. Application pipelines call shared functions for Maven packaging, Docker image builds, Docker Hub authentication, and image publishing.
 
 ## Repository Structure
 
 ```text
 jenkins-shared-library/
 ├── vars/
-│   ├── buildJar.groovy       # Runs Maven packaging
-│   ├── buildImage.groovy     # Wraps Docker.buildDockerImage
-│   ├── dockerLogin.groovy    # Wraps Docker.dockerLogin
-│   └── dockerPush.groovy     # Wraps Docker.dockerPush
-├── src/
-│   ├── com/example/Docker.groovy  # Shared Docker implementation
-│   └── Main.groovy                # Standalone Hello world entry point
-├── lib/                          # Bundled Groovy 5.0.0 JARs and source JARs
-└── .gitignore
+│   ├── buildJar.groovy
+│   ├── buildImage.groovy
+│   ├── dockerLogin.groovy
+│   └── dockerPush.groovy
+├── src/com/example/
+│   └── Docker.groovy       # Shared Docker implementation
+├── lib/                   # Bundled Groovy 5.0.0 JARs and source JARs
+├── .gitignore
+└── README.md
 ```
 
-## Shared Pipeline Functions
+## Shared Functions
 
-| Function | Purpose |
+| Function | Implemented behavior |
 | --- | --- |
-| `buildJar()` | Packages the Maven application |
-| `buildImage(imageName)` | Builds a Docker image |
-| `dockerLogin()` | Authenticates to Docker Hub using Jenkins Credentials |
-| `dockerPush(imageName)` | Pushes the Docker image to Docker Hub |
+| `buildJar()` | Runs `mvn clean package`. |
+| `buildImage(imageName)` | Runs `docker build -t <imageName> .` using the current directory as the build context. |
+| `dockerLogin()` | Authenticates to Docker Hub using Jenkins credential `docker-hub-repo`. |
+| `dockerPush(imageName)` | Runs `docker push <imageName>`. |
 
-The `com.example.Docker` class contains reusable Docker functionality and receives the Jenkins pipeline script so that it can invoke Jenkins steps such as `sh`, `echo`, and `withCredentials`.
+The Docker functions delegate to `src/com/example/Docker.groovy`, which receives the pipeline script to invoke Jenkins steps.
 
 ## Example Usage
 
-After configuring this repository as a Jenkins Shared Library, the functions can be called from an application pipeline:
+An application Jenkinsfile can use the configured shared library as follows. The Jenkins agent needs Maven, Docker, and access to a Docker daemon; the checked-out application must contain a Maven project and Dockerfile. Replace the example image name with the target Docker Hub repository and tag.
 
 ```groovy
-buildJar()
-buildImage('namespace/image:tag')
-dockerLogin()
-dockerPush('namespace/image:tag')
+@Library('jenkins-shared-library') _
+
+pipeline {
+    agent any
+    environment {
+        IMAGE_NAME = 'your-dockerhub-user/your-app:your-tag'
+    }
+    stages {
+        stage('Build and Publish') {
+            steps {
+                buildJar()
+                buildImage(env.IMAGE_NAME)
+                dockerLogin()
+                dockerPush(env.IMAGE_NAME)
+            }
+        }
+    }
+}
 ```
 
-The Jenkins agent requires Maven and Docker to execute these operations.
+## Credential Handling
+
+Docker Hub authentication uses a Jenkins username/password credential with ID `docker-hub-repo`. Inside `withCredentials`, Jenkins binds the values to `USER` and `PASS`. The shell expands these variables; Groovy does not interpolate the credential values:
+
+```sh
+printf '%s' "$PASS" | docker login -u "$USER" --password-stdin
+```
+
+Credential values are managed in Jenkins and are not stored in this repository.
 
 ## Technologies
 
-- Jenkins
-- Jenkins Shared Libraries
-- Groovy
-- Maven
-- Docker
-- Docker Hub
-- Jenkins Credentials
-
-## Credentials
-
-Docker Hub credentials are managed through Jenkins Credentials and referenced through a Jenkins credential ID.
-
-No Docker Hub usernames, passwords, or access tokens are stored directly in this repository.
+Jenkins · Jenkins Shared Libraries · Groovy · Maven · Docker · Docker Hub · Jenkins Credentials · Git · GitHub
 
 ## What This Project Demonstrates
 
-- Creating reusable Jenkins Shared Library functions
-- Structuring CI/CD logic with Groovy
-- Separating reusable pipeline logic from application code
-- Automating Maven packaging and Docker image workflows
-- Integrating Jenkins Credentials with Docker Hub authentication
-- Sharing CI/CD functionality across repositories
+- Reusable Jenkins pipeline components with Groovy-based Shared Libraries
+- Separation of application and CI/CD logic
+- Maven build automation
+- Docker image build and publishing
+- Jenkins credential handling
+- Cross-repository CI/CD reuse
 
 ## Related Project
 
-[jenkins-java-maven-cicd](https://github.com/Johnpaul790/jenkins-java-maven-cicd)
+[jenkins-java-maven-cicd](https://github.com/Johnpaul790/jenkins-java-maven-cicd) contains the application pipeline that consumes this library.
 
-The related repository contains the Java/Maven application and the CI/CD pipeline that consumes this shared library.
+## Project Background
+
+Implemented as a hands-on DevOps project during technical training and further developed to practice reusable CI/CD workflows.
