@@ -33,5 +33,6 @@ bin/
 *.iml
 target/
 
-
+# Local Groovy SDK files
+/lib/
 

@@ -19,10 +19,28 @@ jenkins-shared-library/
 │   └── dockerPush.groovy
 ├── src/com/example/
 │   └── Docker.groovy       # Shared Docker implementation
-├── lib/                   # Bundled Groovy 5.0.0 JARs and source JARs
 ├── .gitignore
 └── README.md
 ```
+
+## Local Development
+
+Edit this library in Visual Studio Code with a Groovy or Jenkinsfile extension.
+Follow the extension's setup instructions for any required development tools.
+
+Jenkins provides the Groovy environment used to execute this shared library.
+Bundled Groovy SDK JARs are not required for Jenkins execution and are not
+tracked in this repository.
+
+The local `lib/` directory was previously used by IntelliJ as a Groovy SDK and
+is now ignored by Git. Existing local copies can remain, but new clones do not
+include them. Install any tools required for local development separately.
+IntelliJ metadata (`.idea/` and `*.iml`) and generated output (`out/`) are also
+ignored.
+
+Validate library changes by running the consuming application's pipeline in
+Jenkins. The Jenkins agent needs Maven, Docker, and access to a Docker daemon.
+Editor checks alone do not validate Jenkins pipeline behavior.
 
 ## Shared Functions
 
