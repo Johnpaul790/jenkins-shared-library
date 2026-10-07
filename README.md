@@ -2,11 +2,11 @@
 
 ## Overview
 
-A reusable [Jenkins Shared Library](https://github.com/Johnpaul790/jenkins-shared-library) for Maven builds and Docker image workflows. It has been successfully loaded and executed by Jenkins from the separate [Java Maven CI/CD application repository](https://github.com/Johnpaul790/jenkins-java-maven-cicd).
+A reusable [Jenkins Shared Library](https://github.com/Johnpaul790/jenkins-shared-library) for Maven builds and Docker image workflows. It has been successfully loaded and executed by Jenkins from the separate [Java Maven CI application repository](https://github.com/Johnpaul790/jenkins-java-maven-cicd).
 
 ## Purpose
 
-Centralize reusable CI/CD logic instead of duplicating it across application Jenkinsfiles. Application pipelines call shared functions for Maven packaging, Docker image builds, Docker Hub authentication, and image publishing.
+Centralize reusable CI logic instead of duplicating it across application Jenkinsfiles. Application pipelines call shared functions for Maven packaging, Docker image builds, Docker Hub authentication, and image publishing.
 
 ## Repository Structure
 
