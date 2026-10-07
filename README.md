@@ -92,16 +92,16 @@ Jenkins · Jenkins Shared Libraries · Groovy · Maven · Docker · Docker Hub �
 ## What This Project Demonstrates
 
 - Reusable Jenkins pipeline components with Groovy-based Shared Libraries
-- Separation of application and CI/CD logic
+- Separation of application and CI logic
 - Maven build automation
 - Docker image build and publishing
 - Jenkins credential handling
-- Cross-repository CI/CD reuse
+- Cross-repository CI reuse
 
 ## Related Project
 
-[jenkins-java-maven-cicd](https://github.com/Johnpaul790/jenkins-java-maven-cicd) contains the application pipeline that consumes this library.
+[jenkins-java-maven-ci](https://github.com/Johnpaul790/jenkins-java-maven-cicd) contains the application pipeline that consumes this library.
 
 ## Project Background
 
-Implemented as a hands-on DevOps project during technical training and further developed to practice reusable CI/CD workflows.
+A hands-on Jenkins Shared Library project focused on reusable CI logic, Maven build automation, Docker image workflows, and secure credential handling across separate repositories.
