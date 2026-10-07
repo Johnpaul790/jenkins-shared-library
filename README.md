@@ -25,22 +25,19 @@ jenkins-shared-library/
 
 ## Local Development
 
-Edit this library in Visual Studio Code with a Groovy or Jenkinsfile extension.
-Follow the extension's setup instructions for any required development tools.
+Library changes are edited locally and validated by running the consuming application's Jenkins pipeline.
 
-Jenkins provides the Groovy environment used to execute this shared library.
-Bundled Groovy SDK JARs are not required for Jenkins execution and are not
-tracked in this repository.
+The Jenkins agent must provide:
 
-The local `lib/` directory was previously used by IntelliJ as a Groovy SDK and
-is now ignored by Git. Existing local copies can remain, but new clones do not
-include them. Install any tools required for local development separately.
-IntelliJ metadata (`.idea/` and `*.iml`) and generated output (`out/`) are also
-ignored.
+Maven
 
-Validate library changes by running the consuming application's pipeline in
-Jenkins. The Jenkins agent needs Maven, Docker, and access to a Docker daemon.
-Editor checks alone do not validate Jenkins pipeline behavior.
+Docker CLI
+
+Access to a Docker daemon
+
+Editor or IDE validation can help with syntax, but the Shared Library is ultimately executed in the Jenkins runtime environment, so Jenkins pipeline execution is the final validation step.
+
+Local IDE metadata, generated output, and development-only dependencies are excluded from version control through .gitignore.
 
 ## Shared Functions
 
