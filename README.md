@@ -100,7 +100,7 @@ Jenkins · Jenkins Shared Libraries · Groovy · Maven · Docker · Docker Hub �
 
 ## Related Project
 
-[jenkins-java-maven-ci](https://github.com/Johnpaul790/jenkins-java-maven-cicd) contains the application pipeline that consumes this library.
+[jenkins-java-maven-cicd](https://github.com/Johnpaul790/jenkins-java-maven-cicd) contains the application pipeline that consumes this library.
 
 ## Project Background
 
